@@ -6,17 +6,17 @@ const randomBytes = promisify(crypto.randomBytes)
 
 dotenv.config()
 
-const region = "us-west-2"
-const bucketName = "direct-upload-s3-bucket-thing"
-const accessKeyId = process.env.AWS_ACCESS_KEY_ID
-const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
+const bucketName = "opencanyon-images"
+const region = "eu-central-1"
 
-const s3 = new aws.S3({
-  region,
-  accessKeyId,
-  secretAccessKey,
-  signatureVersion: 'v4'
-})
+const S3Config = {
+  region: region,
+  bucketName: bucketName
+}
+
+aws.config.update(S3Config)
+
+const s3 = new aws.S3()
 
 export async function generateUploadURL() {
   const rawBytes = await randomBytes(16)
@@ -24,6 +24,7 @@ export async function generateUploadURL() {
 
   const params = ({
     Bucket: bucketName,
+    //Key: albumType+"/"+albumId+"/"+imageName,
     Key: imageName,
     Expires: 60
   })
