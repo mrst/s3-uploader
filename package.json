@@ -1,0 +1,19 @@
+{
+  "type": "module",
+  "dependencies": {
+    "express": "^4.17.1",
+    "aws-sdk": "^2.879.0",
+    "dotenv": "^16.0.0"
+  },
+  "scripts": {
+    "start": "node server/start.js"
+  },
+  "name": "glide-s3-uploader",
+  "version": "1.0.0",
+  "main": "server/start.js",
+  "devDependencies": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
