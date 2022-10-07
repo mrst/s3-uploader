@@ -19,14 +19,14 @@ aws.config.update(S3Config)
 
 const s3 = new aws.S3()
 
-export async function generateUploadURL() {
+export async function generateUploadURL(req) {
   const rawBytes = await randomBytes(16)
   const imageName = rawBytes.toString('hex')
 
   const params = ({
     Bucket: bucketName,
     //Key: albumType+"/"+albumId+"/"+imageName,
-    Key: imageName,
+    Key: imageName+"."+req.headers.fileextension,
     Expires: 60
   })
   

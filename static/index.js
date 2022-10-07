@@ -36,16 +36,16 @@ function processImagesForUpload(e) {
 }
 
 async function uploadToS3(file, preview) {
-
+  
+  const fileExtension = file.name.split(".")[1];
   // get secure url from our server
-  const { url } = await fetch("/s3Url").then(res => res.json())
-  console.log(url)
+  const { url } = await fetch("/s3Url", { headers: {"fileExtension": fileExtension}}).then(res => res.json())
 
   // post the image direclty to the s3 bucket
   await fetch(url, {
     method: "PUT",
     headers: {
-      "Content-Type": "image/jpeg"
+      "Content-Type": file.type
     },
     body: file
   })
