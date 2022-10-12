@@ -20,13 +20,18 @@ aws.config.update(S3Config)
 const s3 = new aws.S3()
 
 export async function generateUploadURL(req) {
+
+  if (req.headers['content-type'].split('/')[0] !== 'image') {
+    console.log("content type does not match")
+    return false
+  }
+
   const rawBytes = await randomBytes(16)
   const imageName = rawBytes.toString('hex')
 
   const params = ({
     Bucket: bucketName,
-    //Key: albumType+"/"+albumId+"/"+imageName,
-    Key: imageName+"."+req.headers.fileextension,
+    Key: req.params.itemID+"/"+req.params.albumID + "/" + imageName+"."+req.headers['file-extension'],
     Expires: 60
   })
   

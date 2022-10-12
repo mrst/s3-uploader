@@ -5,7 +5,7 @@ const app = express()
 
 app.use(express.static('static'))
 
-app.get('/s3Url', async (req, res) => {
+app.get('/s3Url/:itemID/:albumID', async (req, res) => {
   const url = await generateUploadURL(req)
   res.send({url})
 })

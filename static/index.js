@@ -1,6 +1,8 @@
 
 const fileInput = document.querySelector("#files")
-const dropzone = document.querySelector("#dropzone");
+const dropzone = document.querySelector("#dropzone")
+const albumID = uuidv4()
+const urlParams = new URLSearchParams(window.location.search);
 
 fileInput.addEventListener("change", processImagesForUpload, false);
 
@@ -31,15 +33,15 @@ function processImagesForUpload(e) {
     thumbnail.innerHTML = `<div class='upload__img-box'><div class='loading'></div></div>`;
     output.appendChild(thumbnail);
 
-    uploadToS3(files[i], thumbnail);
+    uploadToS3(files[i], thumbnail, albumID);
   }
 }
 
-async function uploadToS3(file, preview) {
-  
+async function uploadToS3(file, preview, albumID) {
+  const itemID = urlParams.get('id');
   const fileExtension = file.name.split(".")[1];
   // get secure url from our server
-  const { url } = await fetch("/s3Url", { headers: {"fileExtension": fileExtension}}).then(res => res.json())
+  const { url } = await fetch("/s3Url/"+itemID+"/"+albumID, { headers: {"File-Extension": fileExtension, "Content-Type": file.type}}).then(res => res.json())
 
   // post the image direclty to the s3 bucket
   await fetch(url, {
@@ -59,4 +61,10 @@ async function uploadToS3(file, preview) {
     <div class='upload__img-box'>
       <div style='background-image: url("${imageUrl}")' class='img-bg'></div>
     </div>`;
+}
+
+function uuidv4() {
+  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  );
 }
