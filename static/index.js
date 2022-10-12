@@ -39,7 +39,8 @@ function processImagesForUpload(e) {
 
 async function uploadToS3(file, preview, albumID) {
   const itemID = urlParams.get('id');
-  const fileExtension = file.name.split(".")[1];
+  const fileNameArray = file.name.split(".");
+  const fileExtension = fileNameArray[fileNameArray.length-1];
   // get secure url from our server
   const { url } = await fetch("/s3Url/"+itemID+"/"+albumID, { headers: {"File-Extension": fileExtension, "Content-Type": file.type}}).then(res => res.json())
 
